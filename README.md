@@ -1,23 +1,21 @@
 
 
-## My summerhouse surveillance IoT project
+# My summerhouse surveillance IoT project
 
 The purpose with the project is to surveillance power outage and temperature in a summerhouse on northern Öland. The house is empty for long periods, especially in the winter, and therefore it is interesting to see how the temperature varies and also see if there often is power outage. Actions will be taken dependent on the outcome of this project.
 
-The main objective in participating in the course is to explore the IoT world and try to find out what benefits we can have from it in our company.
-
 ### Surveilence
 
-##Assumption
+#### Assumption
 When there power in the summerhouse it is possible to connect the Lopy4 to Wi-Fi, but when there is power outage the Wi-Fi is down and the Lopy4 is connected to Internet by LoRa. So that is mainly the way to detect when there is power outage.
 
-##Connections
+#### Connections
 Data (date, temperature, wifi/lora) is posted to a service on Electra and stored in a database. The usage of an internal service makes it possible to take actions on different events, e.g. when LoRa network is used instead of wifi, or when the temperature is going below a certain level. We can send e.g. send email or SMS.
 
-#LoRa/Helium
+#### LoRa/Helium
 The Lopy4 device is setup in Helium and an integration is made with a service on Electra.
 
-##Presentation
+## Presentation
 
 ![image](https://user-images.githubusercontent.com/91141901/140646373-c2796a04-63bc-4d24-bb71-d68100b04e79.png)
 
@@ -27,11 +25,17 @@ The Lopy4 device is setup in Helium and an integration is made with a service on
 
 The material consists of
 Lopy4 (https://pycom.io/product/lopy4/)
+
 Expansion board 3.0 (https://pycom.io/product/expansion-board-3-0/)
+
 Temperature sensor MCP9700
+
 Batteri LiPo 3.7V 4400mAh
+
 Breadboard (generic)
- Antenna
+
+Antenna
+
 Jumper wire
 
 The hardware is quite simple and the only things used, except from the Lopy4 and Expansion bord, is the MCP9700 temperature sensor. This is connected to ADC pin 15 on the expansion board.
