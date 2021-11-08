@@ -75,10 +75,7 @@ time.sleep(2) #sleep for 1 second
 
 wlan = WLAN(mode=WLAN.STA)
 
-#wlan.connect(ssid='Electra.ans', auth=(WLAN.WPA2, '543rt5my'))
-#wlan.connect(ssid='itr6800', auth=(WLAN.WPA2, '2l8nites4U'))
 wlan.connect(ssid='Stargate_IoT', auth=(WLAN.WPA2, 'TieFighter'))
-#wlan.connect(ssid='Martins iPhone', auth=(WLAN.WPA2, 'j1aqdr2q2heb9'))
 #while not wlan.isconnected():
 #    print("WiFi not connected")
 #    time.sleep(2) #sleep for 2 seconds
