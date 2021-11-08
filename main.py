@@ -22,7 +22,7 @@ import socket
 
 pycom.heartbeat(False)
 pycom.rgbled(0x0000FF) # blue
-time.sleep(2) #sleep for 1 second
+#time.sleep(2) #sleep for 1 second
 
 ##====== LoRa ======
 
@@ -32,13 +32,13 @@ time.sleep(2) #sleep for 1 second
 ## Australia = LoRa.AU915
 ## Europe = LoRa.EU868
 ## United States = LoRa.US915
-#lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
+lora = LoRa(mode=LoRa.LORAWAN, region=LoRa.EU868)
 
-## create an OTAA authentication parameters, change them to the provided credentials
-#app_eui = ubinascii.unhexlify('6081F9FF68E87979')
-#app_key = ubinascii.unhexlify('B8078474D99CC4CCAEFE3B563AECB8E7')
-##uncomment to use LoRaWAN application provided dev_eui
-#dev_eui = ubinascii.unhexlify('70B3D549957622C1')
+# create an OTAA authentication parameters, change them to the provided credentials
+app_eui = ubinascii.unhexlify('6081F9FF68E87979')
+app_key = ubinascii.unhexlify('B8078474D99CC4CCAEFE3B563AECB8E7')
+#uncomment to use LoRaWAN application provided dev_eui
+dev_eui = ubinascii.unhexlify('70B3D549957622C1')
 
 ## Uncomment for US915 / AU915 & Pygate
 ## for i in range(0,8):
@@ -75,7 +75,10 @@ time.sleep(2) #sleep for 1 second
 
 wlan = WLAN(mode=WLAN.STA)
 
+#wlan.connect(ssid='Electra.ans', auth=(WLAN.WPA2, '543rt5my'))
+#wlan.connect(ssid='itr6800', auth=(WLAN.WPA2, '2l8nites4U'))
 wlan.connect(ssid='Stargate_IoT', auth=(WLAN.WPA2, 'TieFighter'))
+#wlan.connect(ssid='Martins iPhone', auth=(WLAN.WPA2, 'j1aqdr2q2heb9'))
 #while not wlan.isconnected():
 #    print("WiFi not connected")
 #    time.sleep(2) #sleep for 2 seconds
@@ -110,31 +113,50 @@ while True: #Forever loop
 
     if wlan.isconnected():
 
-        print("WiFi connected succesfully")
+        print("WiFi connected")
         time.sleep(5) #sleep for 5 seconds
         print(wlan.ifconfig())
 
         # setup socket for connection
-        s = socket.socket()
+        wifi_socket = socket.socket()
         #s = ssl.wrap_socket(s)
         host = 'dev.electra.se'
         addr = socket.getaddrinfo(host,80)[0][-1]
-        s.connect(addr)
+        wifi_socket.connect(addr)
         print('socket connected')
 
         data = '2,' + str(vbat) + ',' + str(degC) + ',' + '4'
         httpreq = 'POST /MessageHandler.ashx HTTP/1.1 \r\nHOST: '+ host + '\r\nContent-Length: ' + str(len(data)) + '\r\nConnection: keep-alive \r\n\r\n' + data
         print('http request: \n', httpreq)
-        s.send(httpreq)
-        rec_bytes = s.recv(10000)
+        wifi_socket.send(httpreq)
+        rec_bytes = wifi_socket.recv(10000)
         print(rec_bytes)
     else:
         print("WiFi not connected")
-        lora_socket = connect_lora_socket()
+
+        # Try to join LoRa
+        if not lora.has_joined():
+            # join a network using OTAA (Over the Air Activation)
+            #uncomment below to use LoRaWAN application provided dev_eui
+            #lora.join(activation=LoRa.OTAA, auth=(app_eui, app_key), timeout=0)
+            lora.join(activation=LoRa.OTAA, auth=(dev_eui, app_eui, app_key), timeout=0)
+
+            # wait until the module has joined the network
+            while not lora.has_joined():
+                time.sleep(2.5)
+                print('LoRa not yet joined...')
+
+            # create a LoRa socket
+            lora_socket = socket.socket(socket.AF_LORA, socket.SOCK_RAW)
+
+        #else:
+            #lora_socket = connect_lora_socket()
+
+        print('LoRa joined')
 
         ## send some data
         data = '2,' + str(vbat) + ',' + str(degC) + ',' + '3'
-        s.send(data)
+        lora_socket.send(data)
 
-    time.sleep(600) #sleep for 10 minutes
+    #time.sleep(600) #sleep for 10 minutes
     time.sleep(10) #sleep for 10 seconds
