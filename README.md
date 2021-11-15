@@ -4,7 +4,7 @@
 
 The purpose with the project is to surveillance power outage and temperature in a summerhouse on northern Öland. The house is empty for long periods, especially in the winter, and therefore it is interesting to see how the temperature varies and also see if there often is power outage. Actions will be taken dependent on the outcome of this project.
 
-### Surveilence
+### Surveillance
 
 #### Assumption
 When there is power in the summerhouse it is possible to connect the Lopy4 to wifi, but when there is power outage the wifi is down and the Lopy4 is connected to Internet by LoRa. So that is mainly the way to detect when there is power outage.
