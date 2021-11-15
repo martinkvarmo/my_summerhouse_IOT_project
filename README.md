@@ -23,7 +23,7 @@ Data (date, temperature, wifi or lora used) is posted to a ASHX web service, hos
 The Expansion board is mainly powered by USB and a battery as backup in case of power outage.
 
 #### LoRa/Helium
-The Lopy4 device is setup in Helium and integrated with a the service on Electra.
+The Lopy4 device is setup in Helium and integrated with a service on Electra.
 
 ### Presentation
 
